@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Test Data</title>
+
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+
+  <style>
+    * {
+      margin: 0;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="tableContainer"></div>
+
+  <script>
+    $(document).ready(function () {
+      orandelliBulten();
+    });
+
+
+    function clear(site) {
+      if (site == "iddaalobisi") {
+        $('#tableContainer').find('h1').remove();
+        $('#tableContainer').find('h2').remove();
+        $('#tableContainer').find('h3').remove();
+        $('#tableContainer').find('.fs15').remove();
+        $('#tableContainer').find('p').remove();
+        $('#tableContainer').find('br').remove();
+        $('#tableContainer').find('b').remove();
+      }
+      else if (site == "betistuta") {
+        $('tr').each(function (i, el) {
+          var check = $(el).attr('onclick');
+          if (i > 1 && check == undefined)
+            $(el).remove();
+
+          $(el).attr('onclick', '').attr('onmouseover', '').attr('onmouseout', '');
+        });
+      }
+
+    }
+
+    function iddaalobisi() {
+      $.ajax({
+        url: 'http://localhost:5000/iddaalobisi',
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        statusCode: {
+          200: function (data) {
+            console.log(data)
+            var table = data.responseText;
+            var parseHtml = $.parseHTML(table);
+            $('#tableContainer').append(table);
+            clear("iddaalobisi");
+
+            $('head').append('<link href="style/iddaalobisi.css" rel="stylesheet" type="text/css">');
+          },
+          400: function (err) {
+            console.log(err);
+          }
+        }
+
+      });
+    }
+
+    function betistutaFutbol() {
+      $.ajax({
+        url: 'http://localhost:5000/betistuta-futbol',
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        statusCode: {
+          200: function (data) {
+            var table = data.responseText;
+            var parseHtml = $.parseHTML(table);
+            $('#tableContainer').append(table);
+            clear("betistuta");
+
+            $('head').append('<link href="style/betistuta.css" rel="stylesheet" type="text/css">');
+
+          },
+          400: function (err) {
+            console.log(err);
+            var error = err.responseText;
+            var parseHtml = $.parseHTML(error);
+            $('#tableContainer').append(error);
+          }
+        }
+
+      });
+    }
+
+    function orandelliBulten() {
+
+      $.ajax({
+        url: 'http://localhost:5000/orandelli-bulten',
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        statusCode: {
+          200: function (data) {
+            var table = data.responseText;
+            var parseHtml = $.parseHTML(table);
+            $('#tableContainer').append('<table cellspacing="0" cellpadding="0" border="0" id="table_bulten"></table>');
+            $('#table_bulten').append(table);
+            clear("betistuta");
+
+            $('head').append('<link href="style/betistuta.css" rel="stylesheet" type="text/css">');
+
+          },
+          400: function (err) {
+            console.log(err);
+            var error = err.responseText;
+            var parseHtml = $.parseHTML(error);
+            $('#tableContainer').append(error);
+          }
+        }
+
+      });
+    }
+
+
+  </script>
+</body>
+
+</html>
