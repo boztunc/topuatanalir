@@ -23,7 +23,7 @@
 
   <script>
     $(document).ready(function () {
-      orandelliBulten();
+      iddaalobisiOranDus();
     });
 
 
@@ -49,9 +49,9 @@
 
     }
 
-    function iddaalobisi() {
+    function iddaalobisiAvrMaclar() {
       $.ajax({
-        url: 'http://localhost:5000/iddaalobisi',
+        url: 'http://localhost:5000/iddaalobisi-avr-maclar',
         type: "GET",
         dataType: "json",
         contentType: "application/json; charset=utf-8",
@@ -67,6 +67,34 @@
           },
           400: function (err) {
             console.log(err);
+          }
+        }
+
+      });
+    }
+
+    function iddaalobisiOranDus() {
+      $.ajax({
+        url: 'http://localhost:5000/iddaalobisi-oran-dusen',
+        type: "GET",
+        dataType: "json",
+        contentType: "application/json; charset=utf-8",
+        statusCode: {
+          200: function (data) {
+            var table = data.responseText;
+            var parseHtml = $.parseHTML(table);
+            $('#tableContainer').append('<table cellspacing="0" cellpadding="0" border="0" id="table_bulten"></table>');
+            $('#table_bulten').append(table);
+            clear("iddaalobisi");
+
+            $('head').append('<link href="style/oranDusen.css" rel="stylesheet" type="text/css">');
+
+          },
+          400: function (err) {
+            console.log(err);
+            var error = err.responseText;
+            var parseHtml = $.parseHTML(error);
+            $('#tableContainer').append(error);
           }
         }
 
